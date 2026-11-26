@@ -105,6 +105,7 @@ import org.telegram.messenger.BirthdayController;
 import org.telegram.messenger.BotWebViewVibrationEffect;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.Emoji;
@@ -8810,7 +8811,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     public boolean storiesEnabled = true;
     private void updateStoriesPosting() {
-        final boolean storiesEnabled = getMessagesController().storiesEnabled();
+        final boolean storiesEnabled = !CleanUi.HIDE_STORIES && getMessagesController().storiesEnabled();
         if (this.storiesEnabled != storiesEnabled) {
             updateFloatingButtonOffset();
             if (!this.storiesEnabled && storiesEnabled && storyHint != null) {
@@ -12419,6 +12420,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     public void updateStoriesVisibility(boolean animated) {
+        if (CleanUi.HIDE_STORIES) {
+            if (dialogStoriesCell != null) {
+                dialogStoriesCell.setVisibility(View.GONE);
+            }
+            dialogStoriesCellVisible = false;
+            hasStories = false;
+            hasOnlySlefStories = false;
+            return;
+        }
         if (dialogStoriesCell == null || storiesVisibilityAnimator != null || rightSlidingDialogContainer != null && rightSlidingDialogContainer.hasFragment() || searchIsShowed || actionBar == null || actionBar.isActionModeShowed() || onlySelect) {
             return;
         }

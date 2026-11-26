@@ -20,6 +20,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.DownloadSpeedEstimator;
@@ -248,6 +249,9 @@ public class StoriesController {
     }
 
     public boolean hasStories(long dialogId) {
+        if (CleanUi.HIDE_STORIES) {
+            return false;
+        }
         if (dialogId == 0) {
             return false;
         }
@@ -281,6 +285,9 @@ public class StoriesController {
     }
 
     public boolean hasStories() {
+        if (CleanUi.HIDE_STORIES) {
+            return false;
+        }
         return (dialogListStories != null && dialogListStories.size() > 0) || hasSelfStories();
     }
 
@@ -1116,6 +1123,9 @@ public class StoriesController {
     }
 
     public boolean hasSelfStories() {
+        if (CleanUi.HIDE_STORIES) {
+            return false;
+        }
         long clientUserId = UserConfig.getInstance(currentAccount).clientUserId;
         TL_stories.PeerStories storyItem = allStoriesMap.get(clientUserId);
         if (storyItem != null && !storyItem.stories.isEmpty()) {
@@ -4323,6 +4333,9 @@ public class StoriesController {
     }
 
     public boolean hasOnlySelfStories() {
+        if (CleanUi.HIDE_STORIES) {
+            return false;
+        }
         return hasSelfStories() && (getDialogListStories().isEmpty() || (getDialogListStories().size() == 1 && DialogObject.getPeerDialogId(getDialogListStories().get(0).peer) == UserConfig.getInstance(currentAccount).clientUserId));
     }
 
@@ -4551,6 +4564,10 @@ public class StoriesController {
     }
 
     public void canSendStoryFor(long dialogId, Utilities.Callback<Boolean> consumer, boolean showLimitsBottomSheet, Theme.ResourcesProvider resourcesProvider) {
+        if (CleanUi.HIDE_STORIES) {
+            consumer.run(false);
+            return;
+        }
         final TL_stories.TL_stories_canSendStory tl_stories_canSendStory = new TL_stories.TL_stories_canSendStory();
         tl_stories_canSendStory.peer = MessagesController.getInstance(currentAccount).getInputPeer(dialogId);
         ConnectionsManager.getInstance(currentAccount).sendRequest(tl_stories_canSendStory, (res, err) -> AndroidUtilities.runOnUIThread(() -> {

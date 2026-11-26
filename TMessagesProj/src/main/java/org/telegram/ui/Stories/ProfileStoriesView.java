@@ -33,6 +33,7 @@ import com.google.zxing.common.detector.MathUtils;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
@@ -202,6 +203,16 @@ public class ProfileStoriesView extends View implements NotificationCenter.Notif
 
     private void updateStories(boolean animated, boolean asUpdate) {
         if (isTopic) {
+            return;
+        }
+        if (CleanUi.HIDE_STORIES) {
+            for (StoryCircle circle : circles) {
+                circle.destroy();
+            }
+            circles.clear();
+            peerStories = null;
+            unreadCount = 0;
+            invalidate();
             return;
         }
         final boolean me = dialogId == UserConfig.getInstance(currentAccount).getClientUserId();

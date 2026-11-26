@@ -141,6 +141,7 @@ import org.telegram.messenger.BirthdayController;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ChatThemeController;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.DocumentObject;
@@ -5595,6 +5596,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         storyView = new ProfileStoriesView(context, currentAccount, getDialogId(), isTopic, avatarContainer, avatarImage, resourcesProvider) {
             @Override
             protected void onTap(StoryViewer.PlaceProvider provider) {
+                if (CleanUi.HIDE_STORIES) {
+                    expandAvatar();
+                    return;
+                }
                 long did = getDialogId();
                 StoriesController storiesController = getMessagesController().getStoriesController();
                 if (storiesController.hasStories(did) || storiesController.hasUploadingStories(did) || storiesController.isLastUploadingFailed(did)) {
@@ -9399,7 +9404,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     avatarImage.setHasStories(needInsetForStories());
                 }
                 if (chatId != 0) {
-                    boolean gift = !BuildVars.IS_BILLING_UNAVAILABLE && !getMessagesController().premiumPurchaseBlocked() && chatInfo != null && chatInfo.stargifts_available;
+                    boolean gift = !CleanUi.HIDE_PAID_PROMO && !BuildVars.IS_BILLING_UNAVAILABLE && !getMessagesController().premiumPurchaseBlocked() && chatInfo != null && chatInfo.stargifts_available;
                     otherItem.setSubItemShown(gift_premium, gift);
                     if (actionsView != null) {
                         actionsView.set(ProfileActionsView.KEY_GIFT, gift);
@@ -10701,7 +10706,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
         fetchUsersFromChannelInfo();
         if (chatId != 0) {
-            boolean gift = !BuildVars.IS_BILLING_UNAVAILABLE && !getMessagesController().premiumPurchaseBlocked() && chatInfo != null && chatInfo.stargifts_available;
+            boolean gift = !CleanUi.HIDE_PAID_PROMO && !BuildVars.IS_BILLING_UNAVAILABLE && !getMessagesController().premiumPurchaseBlocked() && chatInfo != null && chatInfo.stargifts_available;
             otherItem.setSubItemShown(gift_premium, gift);
             if (actionsView != null) {
                 actionsView.set(ProfileActionsView.KEY_GIFT, gift);
