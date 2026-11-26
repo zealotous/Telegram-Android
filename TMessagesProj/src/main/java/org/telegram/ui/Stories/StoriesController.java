@@ -1753,9 +1753,6 @@ public class StoriesController {
     }
 
     public int getTotalStoriesCount(boolean hidden) {
-        if (CleanUi.HIDE_STORIES) {
-            return 0;
-        }
         if (hidden) {
             return hasMoreHidden ? Math.max(1, totalStoriesCountHidden) : hiddenListStories.size();
         } else {
@@ -1813,9 +1810,6 @@ public class StoriesController {
     }
 
     public boolean hasHiddenStories() {
-        if (CleanUi.HIDE_STORIES) {
-            return false;
-        }
         return !hiddenListStories.isEmpty();
     }
 
