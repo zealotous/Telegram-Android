@@ -178,7 +178,7 @@ public class UserObject {
     }
 
     public static Long getEmojiStatusDocumentId(TLRPC.EmojiStatus emojiStatus) {
-        if (emojiStatus == null) {
+        if (CleanUi.HIDE_PAID_PROMO || emojiStatus == null) {
             return null;
         }
         if (emojiStatus instanceof TLRPC.TL_emojiStatus) {

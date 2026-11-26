@@ -89,6 +89,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AppGlobalConfig;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BillingController;
 import org.telegram.messenger.BirthdayController;
@@ -6167,6 +6168,9 @@ public class StarGiftSheet extends BottomSheetWithRecyclerListView implements No
 
     @Override
     public void show() {
+        if (CleanUi.HIDE_PAID_PROMO) {
+            return;
+        }
         if (MessagesController.getInstance(currentAccount).isFrozen()) {
             AccountFrozenAlert.show(currentAccount);
             return;

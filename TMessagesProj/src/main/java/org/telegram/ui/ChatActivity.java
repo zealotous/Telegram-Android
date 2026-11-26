@@ -28666,8 +28666,8 @@ public class ChatActivity extends BaseFragment implements
                         } else {
                             bottomOverlayChatText.setText(LocaleController.getString(ChatObject.isChannelAndNotMegaGroup(currentChat) ? R.string.ChannelJoinNoCaps : R.string.GroupJoinNoCaps));
                             bottomOverlayChatText.setEnabled(true);
-                            showGiftButton = chatInfo != null && chatInfo.stargifts_available;
-                            showSuggestButton = currentChat.broadcast_messages_allowed && currentChat.linked_monoforum_id != 0;
+                            showGiftButton = !CleanUi.HIDE_PAID_PROMO && chatInfo != null && chatInfo.stargifts_available;
+                            showSuggestButton = !CleanUi.HIDE_PAID_PROMO && currentChat.broadcast_messages_allowed && currentChat.linked_monoforum_id != 0;
                             accentTextButton = true;
                         }
                         showBottomOverlayProgress(false, false);
@@ -28686,8 +28686,8 @@ public class ChatActivity extends BaseFragment implements
                         bottomOverlayChatText.setEnabled(true);
                     }
                     showBottomOverlayProgress(false, bottomOverlayProgress.getTag() != null);
-                    showGiftButton = chatInfo != null && chatInfo.stargifts_available;
-                    showSuggestButton = currentChat.broadcast_messages_allowed && currentChat.linked_monoforum_id != 0;
+                    showGiftButton = !CleanUi.HIDE_PAID_PROMO && chatInfo != null && chatInfo.stargifts_available;
+                    showSuggestButton = !CleanUi.HIDE_PAID_PROMO && currentChat.broadcast_messages_allowed && currentChat.linked_monoforum_id != 0;
                 } else if (forumTopic != null && forumTopic.closed) {
                     if (!ChatObject.canManageTopic(currentAccount, currentChat, forumTopic)) {
                         Drawable lock = getContext().getResources().getDrawable(R.drawable.msg_mini_lock2).mutate();
@@ -46640,7 +46640,7 @@ public class ChatActivity extends BaseFragment implements
                     options.add(OPTION_COPY);
                     icons.add(R.drawable.msg_copy);
                 }
-                if (currentUser != null && !UserObject.isService(currentUser.id) && (selectedObject.messageOwner.action instanceof TLRPC.TL_messageActionStarGift || selectedObject.messageOwner.action instanceof TLRPC.TL_messageActionStarGiftUnique || selectedObject.messageOwner.action instanceof TLRPC.TL_messageActionGiftPremium)) {
+                if (!CleanUi.HIDE_PAID_PROMO && currentUser != null && !UserObject.isService(currentUser.id) && (selectedObject.messageOwner.action instanceof TLRPC.TL_messageActionStarGift || selectedObject.messageOwner.action instanceof TLRPC.TL_messageActionStarGiftUnique || selectedObject.messageOwner.action instanceof TLRPC.TL_messageActionGiftPremium)) {
                     items.add(selectedObject.isOutOwner() ? getString(R.string.SendAnotherGift) : formatString(R.string.SendGiftTo, UserObject.getForcedFirstName(currentUser)));
                     options.add(OPTION_GIFT);
                     icons.add(R.drawable.menu_gift);

@@ -1675,7 +1675,7 @@ public class SharedMediaLayout extends FrameLayout implements Theme.Colorable, N
             this.initialTab = TAB_BOT_PREVIEWS;
         } else if (userInfo != null && userInfo.bot_info != null && userInfo.bot_info.has_preview_medias) {
             this.initialTab = TAB_STORIES;
-        } else if (main_tab instanceof TLRPC.TL_profileTabPosts && (userInfo != null && userInfo.stories_pinned_available || chatInfo != null && chatInfo.stories_pinned_available || isStoriesView())) {
+        } else if (!CleanUi.HIDE_STORIES && main_tab instanceof TLRPC.TL_profileTabPosts && (userInfo != null && userInfo.stories_pinned_available || chatInfo != null && chatInfo.stories_pinned_available || isStoriesView())) {
             this.initialTab = TAB_STORIES;
         } else if (main_tab instanceof TLRPC.TL_profileTabGifts && (userInfo != null && userInfo.stargifts_count > 0 || chatInfo != null && chatInfo.stargifts_count > 0)) {
             this.initialTab = TAB_GIFTS;
@@ -1689,7 +1689,7 @@ public class SharedMediaLayout extends FrameLayout implements Theme.Colorable, N
             this.initialTab = TAB_AUDIO;
         } else if (main_tab instanceof TLRPC.TL_profileTabVoice && (hasMedia[2] == -1 || hasMedia[2] > 0)) {
             this.initialTab = TAB_VOICE;
-        } else if (userInfo != null && userInfo.stories_pinned_available || chatInfo != null && chatInfo.stories_pinned_available || isStoriesView()) {
+        } else if (!CleanUi.HIDE_STORIES && (userInfo != null && userInfo.stories_pinned_available || chatInfo != null && chatInfo.stories_pinned_available || isStoriesView())) {
             this.initialTab = getInitialTab();
         } else if (userInfo != null && userInfo.stargifts_count > 0 || chatInfo != null && chatInfo.stargifts_count > 0) {
             this.initialTab = TAB_GIFTS;
@@ -3644,7 +3644,7 @@ public class SharedMediaLayout extends FrameLayout implements Theme.Colorable, N
     }
 
     protected boolean includeStories() {
-        return true;
+        return !CleanUi.HIDE_STORIES;
     }
 
     protected boolean includeSavedDialogs() {
@@ -11454,6 +11454,9 @@ public class SharedMediaLayout extends FrameLayout implements Theme.Colorable, N
     }
 
     public float getBottomButtonStoriesVisibility() {
+        if (CleanUi.HIDE_STORIES) {
+            return 0;
+        }
         if (mediaPages == null || mediaPages[0] == null || mediaPages[1] == null || mediaPages[0].emptyView == null || mediaPages[1].emptyView == null) {
             return 1;
         }

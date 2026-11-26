@@ -125,6 +125,7 @@ import org.telegram.messenger.BotForumHelper;
 import org.telegram.messenger.BotWebViewVibrationEffect;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.Emoji;
@@ -3786,7 +3787,7 @@ public class ChatActivityEnterView extends FrameLayout implements
     }
 
     private void createGiftButton() {
-        if (giftButton != null || parentFragment == null) {
+        if (CleanUi.HIDE_PAID_PROMO || giftButton != null || parentFragment == null) {
             return;
         }
 
@@ -3876,22 +3877,23 @@ public class ChatActivityEnterView extends FrameLayout implements
     private boolean suggestButtonVisible;
     private ValueAnimator suggestButtonAppear;
     public void setSuggestionButtonVisible(boolean visible, boolean animated) {
-        if (suggestButtonVisible == visible && animated) return;
+        final boolean show = visible && !CleanUi.HIDE_PAID_PROMO;
+        if (suggestButtonVisible == show && animated) return;
         if (suggestButton == null) {
-            if (visible || isLiveComment) {
+            if (show || isLiveComment) {
                 createSuggestionButton();
             } else {
                 return;
             }
         }
-        final boolean changed = suggestButtonVisible != visible;
-        suggestButtonVisible = visible;
+        final boolean changed = suggestButtonVisible != show;
+        suggestButtonVisible = show;
 
-        final float s = visible ? 1 : 0.6f;
-        final float alpha = visible ? 1 : 0;
+        final float s = show ? 1 : 0.6f;
+        final float alpha = show ? 1 : 0;
 
-        suggestButton.setEnabled(visible);
-        suggestButton.setClickable(visible);
+        suggestButton.setEnabled(show);
+        suggestButton.setClickable(show);
         if (suggestButtonAppear != null) {
             suggestButtonAppear.cancel();
             suggestButtonAppear = null;
@@ -3911,7 +3913,7 @@ public class ChatActivityEnterView extends FrameLayout implements
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     if (isLiveComment) {
-                        suggestButton.setVisibility(visible ? View.VISIBLE : View.GONE);
+                        suggestButton.setVisibility(show ? View.VISIBLE : View.GONE);
                     }
                 }
             });
@@ -3923,7 +3925,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             suggestButton.setScaleY(s);
             suggestButton.setAlpha(alpha);
             if (isLiveComment) {
-                suggestButton.setVisibility(visible ? View.VISIBLE : View.GONE);
+                suggestButton.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         }
 
@@ -7566,7 +7568,7 @@ public class ChatActivityEnterView extends FrameLayout implements
     }
 
     public static boolean checkPremiumAnimatedEmoji(int currentAccount, long dialogId, BaseFragment parentFragment, FrameLayout container, CharSequence message) {
-        if (message == null || parentFragment == null) {
+        if (CleanUi.HIDE_PAID_PROMO || message == null || parentFragment == null) {
             return false;
         }
         final boolean isPremium = UserConfig.getInstance(currentAccount).isPremium();

@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -182,7 +183,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
         privateRow = rowCount++;
         groupRow = rowCount++;
         channelsRow = rowCount++;
-        storiesRow = rowCount++;
+        storiesRow = CleanUi.HIDE_STORIES ? -1 : rowCount++;
         reactionsRow = rowCount++;
         notificationsSection2Row = rowCount++;
 

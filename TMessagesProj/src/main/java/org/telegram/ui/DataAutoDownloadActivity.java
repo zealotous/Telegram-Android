@@ -31,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -641,7 +642,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             photosRow = rowCount++;
             videosRow = rowCount++;
             filesRow = rowCount++;
-            storiesRow = rowCount++;
+            storiesRow = CleanUi.HIDE_STORIES ? -1 : rowCount++;
             typeSectionRow = rowCount++;
         } else {
             usageHeaderRow = -1;

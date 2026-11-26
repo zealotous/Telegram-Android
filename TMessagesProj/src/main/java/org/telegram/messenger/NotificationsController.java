@@ -1144,6 +1144,9 @@ public class NotificationsController extends BaseController implements Notificat
                     continue;
                 }
                 if (messageObject.isStoryPush) {
+                    if (CleanUi.HIDE_STORIES) {
+                        continue;
+                    }
                     long date = messageObject.messageOwner == null ? System.currentTimeMillis() : messageObject.messageOwner.date * 1000L;
                     long dialogId = messageObject.getDialogId();
                     int id = messageObject.getId();

@@ -737,13 +737,13 @@ public class MessagesController extends BaseController implements NotificationCe
     public boolean starsLocked;
 
     public boolean starsPurchaseAvailable() {
-        return !starsLocked;
+        return !CleanUi.HIDE_PAID_PROMO && !starsLocked;
     }
     public boolean premiumFeaturesBlocked() {
-        return premiumLocked && !getUserConfig().isPremium();
+        return CleanUi.HIDE_PAID_PROMO || premiumLocked && !getUserConfig().isPremium();
     }
     public boolean premiumPurchaseBlocked() {
-        return premiumLocked;
+        return CleanUi.HIDE_PAID_PROMO || premiumLocked;
     }
 
     public List<String> directPaymentsCurrency = new ArrayList<>();
@@ -925,7 +925,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public boolean isPremiumUser(TLRPC.User currentUser) {
-        return currentUser != null && currentUser.premium && !isSupportUser(currentUser);
+        return !CleanUi.HIDE_PAID_PROMO && currentUser != null && currentUser.premium && !isSupportUser(currentUser);
     }
 
     public boolean didPressTranscribeButtonEnough() {

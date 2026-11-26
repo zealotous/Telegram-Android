@@ -3697,7 +3697,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
             @Override
             protected boolean isStoriesView() {
-                return myProfile;
+                return myProfile && !CleanUi.HIDE_STORIES;
             }
 
             @Override
@@ -5629,6 +5629,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
         avatarContainer2.addView(storyView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         giftsView = new ProfileGiftsView(context, currentAccount, getDialogId(), avatarContainer, avatarImage, resourcesProvider);
+        if (CleanUi.HIDE_PAID_PROMO) {
+            giftsView.setVisibility(View.GONE);
+        }
         avatarContainer2.addView(giftsView, 0, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.MATCH_PARENT));
         updateProfileData(true);
 
@@ -10924,7 +10927,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         channelBalanceRow = -1;
         balanceDividerRow = -1;
         hasMusic = false;
-        hasBalance = userId != 0 && userInfo != null && userInfo.wallet_card != null
+        hasBalance = !CleanUi.HIDE_PAID_PROMO && userId != 0 && userInfo != null && userInfo.wallet_card != null
                 && (imageUpdater == null || myProfile);
 
         unblockRow = -1;
@@ -10949,16 +10952,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 hasMedia = sharedMediaPreloader.hasPreviews;
             }
         }
-        if (!hasMedia && userInfo != null) {
+        if (!hasMedia && !CleanUi.HIDE_STORIES && userInfo != null) {
             hasMedia = userInfo.stories_pinned_available;
         }
         if (!hasMedia && userInfo != null && userInfo.bot_info != null) {
             hasMedia = userInfo.bot_info.has_preview_medias;
         }
-        if (!hasMedia && (userInfo != null && userInfo.stargifts_count > 0 || chatInfo != null && chatInfo.stargifts_count > 0)) {
+        if (!hasMedia && !CleanUi.HIDE_PAID_PROMO && (userInfo != null && userInfo.stargifts_count > 0 || chatInfo != null && chatInfo.stargifts_count > 0)) {
             hasMedia = true;
         }
-        if (!hasMedia && chatInfo != null) {
+        if (!hasMedia && !CleanUi.HIDE_STORIES && chatInfo != null) {
             hasMedia = chatInfo.stories_pinned_available;
         }
         if (!hasMedia) {
@@ -10996,7 +10999,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 settingsSectionRow = rowCount++;
 
                 Set<String> suggestions = getMessagesController().pendingSuggestions;
-                if (suggestions.contains("PREMIUM_GRACE")) {
+                if (!CleanUi.HIDE_PAID_PROMO && suggestions.contains("PREMIUM_GRACE")) {
                     graceSuggestionRow = rowCount++;
                     graceSuggestionSectionRow = rowCount++;
                 } else if (suggestions.contains("VALIDATE_PHONE_NUMBER")) {
@@ -11020,20 +11023,20 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 devicesRow = rowCount++;
                 languageRow = rowCount++;
                 devicesSectionRow = rowCount++;
-                if (!getMessagesController().premiumFeaturesBlocked()) {
+                if (!CleanUi.HIDE_PAID_PROMO && !getMessagesController().premiumFeaturesBlocked()) {
                     premiumRow = rowCount++;
                 }
-                if (getMessagesController().starsPurchaseAvailable()) {
+                if (!CleanUi.HIDE_PAID_PROMO && getMessagesController().starsPurchaseAvailable()) {
                     starsRow = rowCount++;
                 }
                 StarsController.getInstance(currentAccount, true).getBalance();
-                if (ApplicationLoader.isBetaBuild() || ApplicationLoader.isStandaloneBuild() || ApplicationLoader.isHuaweiStoreBuild() || (StarsController.getInstance(currentAccount, true).balanceAvailable() && (StarsController.getInstance(currentAccount, true).hasTransactions() || StarsController.getInstance(currentAccount, true).getBalance().positive()))) {
+                if (!CleanUi.HIDE_PAID_PROMO && (ApplicationLoader.isBetaBuild() || ApplicationLoader.isStandaloneBuild() || ApplicationLoader.isHuaweiStoreBuild() || (StarsController.getInstance(currentAccount, true).balanceAvailable() && (StarsController.getInstance(currentAccount, true).hasTransactions() || StarsController.getInstance(currentAccount, true).getBalance().positive())))) {
                     tonRow = rowCount++;
                 }
-                if (!getMessagesController().premiumFeaturesBlocked()) {
+                if (!CleanUi.HIDE_PAID_PROMO && !getMessagesController().premiumFeaturesBlocked()) {
                     businessRow = rowCount++;
                 }
-                if (!getMessagesController().premiumPurchaseBlocked()) {
+                if (!CleanUi.HIDE_PAID_PROMO && !getMessagesController().premiumPurchaseBlocked()) {
                     premiumGiftingRow = rowCount++;
                 }
                 if (premiumRow >= 0 || starsRow >= 0 || tonRow >= 0 || businessRow >= 0 || premiumGiftingRow >= 0) {
@@ -11159,7 +11162,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     if (userInfo != null && userInfo.can_view_revenue && BotStarsController.getInstance(currentAccount).getTONBalance(userId) > 0) {
                         botTonBalanceRow = rowCount++;
                     }
-                    if (BotStarsController.getInstance(currentAccount).getBotStarsBalance(userId).amount > 0 || BotStarsController.getInstance(currentAccount).hasTransactions(userId)) {
+                    if (!CleanUi.HIDE_PAID_PROMO && (BotStarsController.getInstance(currentAccount).getBotStarsBalance(userId).amount > 0 || BotStarsController.getInstance(currentAccount).hasTransactions(userId))) {
                         botStarsBalanceRow = rowCount++;
                     }
                 }
@@ -11466,6 +11469,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     private Drawable getPremiumCrossfadeDrawable() {
+        if (CleanUi.HIDE_PAID_PROMO) {
+            return null;
+        }
         if (premiumCrossfadeDrawable == null) {
             premiumStarDrawable = ContextCompat.getDrawable(getParentActivity(), R.drawable.msg_premium_liststar).mutate();
             premiumStarDrawable.setColorFilter(dontApplyPeerColor(getThemedColor(Theme.key_profile_verifiedBackground)), PorterDuff.Mode.MULTIPLY);
@@ -12417,7 +12423,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         otherItem.addSubItem(gift_premium, R.drawable.msg_gift_premium, LocaleController.getString(R.string.ProfileSendAGift));
                         giftAction = true;
                     }
-                    if (getMessagesController().config.walletAvailable.get() && !MessagesController.isSupportUser(user) && !UserObject.isService(user.id)) {
+                    if (!CleanUi.HIDE_PAID_PROMO && getMessagesController().config.walletAvailable.get() && !MessagesController.isSupportUser(user) && !UserObject.isService(user.id)) {
                         otherItem.addSubItem(send_money, R.drawable.ic_gram, LocaleController.getString(R.string.WalletSendMoney));
                     }
                     otherItem.addSubItem(start_secret_chat, R.drawable.msg_secret, LocaleController.getString(R.string.StartEncryptedChat));

@@ -79,6 +79,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -3733,6 +3734,9 @@ public class WalletActivity extends UniversalFragment implements NotificationCen
 
     @Override
     public boolean onFragmentCreate() {
+        if (CleanUi.HIDE_PAID_PROMO) {
+            return false;
+        }
         WalletCard2DMaterial.prewarm(org.telegram.messenger.ApplicationLoader.applicationContext);
         getNotificationCenter().addWeakObserver(this, NotificationCenter.walletUpdate);
         getNotificationCenter().addWeakObserver(this, NotificationCenter.starBalanceUpdated);

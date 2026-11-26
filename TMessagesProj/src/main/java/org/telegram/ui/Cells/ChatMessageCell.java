@@ -110,6 +110,7 @@ import org.telegram.messenger.BotForumHelper;
 import org.telegram.messenger.BotInlineKeyboard;
 import org.telegram.messenger.ChatMessageSharedResources;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.CleanUi;
 import org.telegram.utils.code.highlight.CodeHighlighting;
 import org.telegram.utils.twidget.WidgetSandboxTheme;
 import org.telegram.messenger.ContactsController;
@@ -16980,7 +16981,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     nameStatusSlug = ((TLRPC.TL_emojiStatusCollectible) currentUser.emoji_status).slug;
                 }
                 return emojiStatusId;
-            } else if (currentUser.premium) {
+            } else if (!CleanUi.HIDE_PAID_PROMO && currentUser.premium) {
                 return ContextCompat.getDrawable(ApplicationLoader.applicationContext, R.drawable.msg_premium_liststar).mutate();
             }
         } else if (currentChat != null) {

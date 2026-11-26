@@ -68,6 +68,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BillingController;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.BirthdayController;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
@@ -219,6 +220,9 @@ public class StarsIntroActivity extends GradientHeaderActivity implements Notifi
 
     @Override
     public boolean onFragmentCreate() {
+        if (CleanUi.HIDE_PAID_PROMO) {
+            return false;
+        }
         NotificationCenter.getInstance(currentAccount).addWeakObserver(this, NotificationCenter.starOptionsLoaded);
         NotificationCenter.getInstance(currentAccount).addWeakObserver(this, NotificationCenter.starBalanceUpdated);
         NotificationCenter.getInstance(currentAccount).addWeakObserver(this, NotificationCenter.starTransactionsLoaded);

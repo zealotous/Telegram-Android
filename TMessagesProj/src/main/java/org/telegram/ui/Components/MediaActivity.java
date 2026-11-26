@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BotWebViewVibrationEffect;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.LocaleController;
@@ -99,6 +100,9 @@ public class MediaActivity extends BaseFragment implements SharedMediaLayout.Sha
     @Override
     public boolean onFragmentCreate() {
         type = getArguments().getInt("type", TYPE_MEDIA);
+        if (CleanUi.HIDE_STORIES && (type == TYPE_STORIES || type == TYPE_ARCHIVED_CHANNEL_STORIES || type == TYPE_STORIES_SEARCH)) {
+            return false;
+        }
         dialogId = getArguments().getLong("dialog_id");
         topicId = getArguments().getLong("topic_id", 0);
         hashtag = getArguments().getString("hashtag", "");

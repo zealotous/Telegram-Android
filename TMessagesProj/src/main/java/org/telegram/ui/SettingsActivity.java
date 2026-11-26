@@ -742,7 +742,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         });
 
         final Set<String> suggestions = getMessagesController().pendingSuggestions;
-        if (suggestions.contains("PREMIUM_GRACE")) {
+        if (!CleanUi.HIDE_PAID_PROMO && suggestions.contains("PREMIUM_GRACE")) {
             items.add(SuggestionCell.Factory.of(
                 getString(R.string.GraceSuggestionTitle),
                 getString(R.string.GraceSuggestionMessage),

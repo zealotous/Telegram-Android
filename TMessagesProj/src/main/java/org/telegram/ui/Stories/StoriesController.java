@@ -1392,6 +1392,9 @@ public class StoriesController {
     }
 
     public boolean hasUnreadStories(long dialogId) {
+        if (CleanUi.HIDE_STORIES) {
+            return false;
+        }
         TL_stories.PeerStories userStories = allStoriesMap.get(dialogId);
         if (userStories == null) {
             userStories = getStoriesFromFullPeer(dialogId);
@@ -1444,6 +1447,9 @@ public class StoriesController {
     }
 
     public boolean hasLiveStory(long dialogId) {
+        if (CleanUi.HIDE_STORIES) {
+            return false;
+        }
         TL_stories.PeerStories userStories = allStoriesMap.get(dialogId);
         if (userStories == null) {
             userStories = getStoriesFromFullPeer(dialogId);
@@ -1747,6 +1753,9 @@ public class StoriesController {
     }
 
     public int getTotalStoriesCount(boolean hidden) {
+        if (CleanUi.HIDE_STORIES) {
+            return 0;
+        }
         if (hidden) {
             return hasMoreHidden ? Math.max(1, totalStoriesCountHidden) : hiddenListStories.size();
         } else {
@@ -1804,6 +1813,9 @@ public class StoriesController {
     }
 
     public boolean hasHiddenStories() {
+        if (CleanUi.HIDE_STORIES) {
+            return false;
+        }
         return !hiddenListStories.isEmpty();
     }
 
@@ -3142,6 +3154,7 @@ public class StoriesController {
 
         @Override
         public boolean load(boolean force, int count, List<Integer> ids) {
+            if (CleanUi.HIDE_STORIES) return false;
             if (loading) return false;
             if (last_offset == null) return false;
 
@@ -4533,6 +4546,9 @@ public class StoriesController {
     private StoryLimit storyLimitCached;
 
     public StoryLimit checkStoryLimit() {
+        if (CleanUi.HIDE_STORIES) {
+            return null;
+        }
         final int countLimit = UserConfig.getInstance(currentAccount).isPremium() ?
             MessagesController.getInstance(currentAccount).storyExpiringLimitPremium :
             MessagesController.getInstance(currentAccount).storyExpiringLimitDefault;
@@ -4780,6 +4796,9 @@ public class StoriesController {
     }
 
     public boolean canEditStories(long dialogId) {
+        if (CleanUi.HIDE_STORIES) {
+            return false;
+        }
         if (dialogId < 0) {
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-dialogId);
             if (chat == null) {
@@ -4795,6 +4814,9 @@ public class StoriesController {
     }
 
     public boolean canPostStories(TLRPC.Chat chat) {
+        if (CleanUi.HIDE_STORIES) {
+            return false;
+        }
         if (chat == null || !ChatObject.isBoostSupported(chat)) {
             return false;
         }
@@ -4802,6 +4824,9 @@ public class StoriesController {
     }
 
     public boolean canEditStories(TLRPC.Chat chat) {
+        if (CleanUi.HIDE_STORIES) {
+            return false;
+        }
         if (chat == null || !ChatObject.isBoostSupported(chat)) {
             return false;
         }
@@ -4809,6 +4834,9 @@ public class StoriesController {
     }
 
     public boolean canPostStories(long dialogId) {
+        if (CleanUi.HIDE_STORIES) {
+            return false;
+        }
         if (dialogId < 0) {
             TLRPC.Chat chat = MessagesController.getInstance(currentAccount).getChat(-dialogId);
             if (chat == null || !ChatObject.isBoostSupported(chat)) {
@@ -4825,6 +4853,9 @@ public class StoriesController {
     }
 
     public boolean canEditStory(TL_stories.StoryItem storyItem) {
+        if (CleanUi.HIDE_STORIES) {
+            return false;
+        }
         if (storyItem == null) {
             return false;
         }

@@ -37,6 +37,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
@@ -168,6 +169,9 @@ public class CalendarActivity extends BaseFragment implements NotificationCenter
         dialogId = getArguments().getLong("dialog_id");
         topicId = getArguments().getLong("topic_id");
         calendarType = getArguments().getInt("type");
+        if (CleanUi.HIDE_STORIES && (calendarType == TYPE_PROFILE_STORIES || calendarType == TYPE_ARCHIVED_STORIES)) {
+            return false;
+        }
 
         if (calendarType == TYPE_PROFILE_STORIES) {
             storiesList = MessagesController.getInstance(currentAccount).getStoriesController().getStoriesList(dialogId, StoriesController.StoriesList.TYPE_PINNED);

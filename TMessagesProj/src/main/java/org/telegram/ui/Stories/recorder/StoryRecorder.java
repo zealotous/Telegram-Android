@@ -92,6 +92,7 @@ import org.telegram.messenger.AnimationNotificationsLocker;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BotWebViewVibrationEffect;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -482,6 +483,9 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
     }
 
     public void openBot(long botId, String lang_code, SourceView sourceView) {
+        if (CleanUi.HIDE_STORIES) {
+            return;
+        }
         this.botId = botId;
         this.botLang = lang_code;
         this.botEdit = null;
@@ -491,6 +495,9 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
     }
 
     public void openBotEntry(long botId, String lang_code, StoryEntry entry, SourceView sourceView) {
+        if (CleanUi.HIDE_STORIES) {
+            return;
+        }
         if (isShown || entry == null) {
             return;
         }
@@ -555,10 +562,16 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
     }
 
     public void open(SourceView sourceView) {
+        if (CleanUi.HIDE_STORIES) {
+            return;
+        }
         open(sourceView, true);
     }
 
     public void open(SourceView sourceView, boolean animated) {
+        if (CleanUi.HIDE_STORIES) {
+            return;
+        }
         if (isShown) {
             return;
         }
@@ -624,6 +637,9 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
     }
 
     public void openEdit(SourceView sourceView, StoryEntry entry, long time, boolean animated) {
+        if (CleanUi.HIDE_STORIES) {
+            return;
+        }
         if (isShown) {
             return;
         }
@@ -689,6 +705,9 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
     }
 
     public void openForward(SourceView sourceView, StoryEntry entry, long time, boolean animated) {
+        if (CleanUi.HIDE_STORIES) {
+            return;
+        }
         if (isShown) {
             return;
         }
@@ -755,6 +774,9 @@ public class StoryRecorder implements NotificationCenter.NotificationCenterDeleg
 
     private static boolean firstOpen = true;
     public void openRepost(SourceView sourceView, StoryEntry entry) {
+        if (CleanUi.HIDE_STORIES) {
+            return;
+        }
         if (isShown) {
             return;
         }

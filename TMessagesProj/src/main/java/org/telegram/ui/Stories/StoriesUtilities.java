@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -120,6 +121,11 @@ public class StoriesUtilities {
     };
 
     public static void drawAvatarWithStory(long dialogId, Canvas canvas, ImageReceiver avatarImage, boolean hasStories, AvatarStoryParams params) {
+        if (CleanUi.HIDE_STORIES) {
+            hasStories = false;
+            params.forceState = STATE_EMPTY;
+            params.drawnLive = false;
+        }
         StoriesController storiesController = MessagesController.getInstance(UserConfig.selectedAccount).getStoriesController();
         boolean animated = params.animate;
         if (params.dialogId != dialogId) {
@@ -557,7 +563,7 @@ public class StoriesUtilities {
     }
 
     public static int getPredictiveUnreadState(StoriesController storiesController, long dialogId) {
-        if (dialogId == 0) {
+        if (CleanUi.HIDE_STORIES || dialogId == 0) {
             return STATE_EMPTY;
         }
         if (dialogId > 0) {
@@ -1292,6 +1298,9 @@ public class StoriesUtilities {
         }
 
         public boolean checkOnTouchEvent(MotionEvent event, View view) {
+            if (CleanUi.HIDE_STORIES) {
+                return false;
+            }
             child = view;
             StoriesController storiesController = MessagesController.getInstance(UserConfig.selectedAccount).getStoriesController();
             if (event.getAction() == MotionEvent.ACTION_DOWN && originalAvatarRect.contains(event.getX(), event.getY())) {
@@ -1383,6 +1392,9 @@ public class StoriesUtilities {
         }
 
         private void processOpenStory(View view) {
+            if (CleanUi.HIDE_STORIES) {
+                return;
+            }
             if (onAvatarClick(view, dialogId)) {
                 return;
             }
@@ -1418,6 +1430,9 @@ public class StoriesUtilities {
         }
 
         public void openStory(long dialogId, Runnable onDone) {
+            if (CleanUi.HIDE_STORIES) {
+                return;
+            }
             BaseFragment fragment = LaunchActivity.getLastFragment();
             if (fragment != null && child != null) {
                 fragment.getOrCreateStoryViewer().doOnAnimationReady(onDone);

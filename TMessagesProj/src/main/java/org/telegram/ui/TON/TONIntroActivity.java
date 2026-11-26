@@ -32,6 +32,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BillingController;
 import org.telegram.messenger.BirthdayController;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
@@ -128,6 +129,9 @@ public class TONIntroActivity extends GradientHeaderActivity implements Notifica
 
     @Override
     public boolean onFragmentCreate() {
+        if (CleanUi.HIDE_PAID_PROMO) {
+            return false;
+        }
         NotificationCenter.getInstance(currentAccount).addWeakObserver(this, NotificationCenter.starOptionsLoaded);
         NotificationCenter.getInstance(currentAccount).addWeakObserver(this, NotificationCenter.starBalanceUpdated);
         NotificationCenter.getInstance(currentAccount).addWeakObserver(this, NotificationCenter.starTransactionsLoaded);

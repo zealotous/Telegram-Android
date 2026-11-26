@@ -1,6 +1,7 @@
 package org.telegram.ui.Cells;
 
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.CleanUi;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -485,7 +486,7 @@ public class GroupCallUserCell extends FrameLayout implements Theme.Colorable {
                 rightDrawable.set(verifiedDrawable = (verifiedDrawable == null ? new VerifiedDrawable(getContext()) : verifiedDrawable), animated);
             } else if (currentUser != null && DialogObject.getEmojiStatusDocumentId(currentUser.emoji_status) != 0) {
                 rightDrawable.set(DialogObject.getEmojiStatusDocumentId(currentUser.emoji_status), animated);
-            } else if (currentUser != null && currentUser.premium) {
+            } else if (currentUser != null && !CleanUi.HIDE_PAID_PROMO && currentUser.premium) {
                 if (premiumDrawable == null) {
                     premiumDrawable = getContext().getResources().getDrawable(R.drawable.msg_premium_liststar).mutate();
                     premiumDrawable = new AnimatedEmojiDrawable.WrapSizeDrawable(premiumDrawable, AndroidUtilities.dp(14), AndroidUtilities.dp(14)) {

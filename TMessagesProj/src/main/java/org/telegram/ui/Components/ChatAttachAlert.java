@@ -92,6 +92,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.AnimationNotificationsLocker;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.CleanUi;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
@@ -6743,7 +6744,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                         needPremium = !MessagesController.getInstance(currentAccount).storyEntitiesAllowed();
                     }
                     attachButton.glassTabView.setCounter(err ? "!" : null, err, false);
-                    attachButton.glassTabView.setPremiumBadge(needPremium && !UserConfig.getInstance(currentAccount).isPremium());
+                    attachButton.glassTabView.setPremiumBadge(!CleanUi.HIDE_PAID_PROMO && needPremium && !UserConfig.getInstance(currentAccount).isPremium());
                     break;
                 case VIEW_TYPE_BOT_BUTTON:
                     AttachBotButton child = (AttachBotButton) holder.itemView;
@@ -6850,14 +6851,14 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 final boolean paidUser = user != null && ((ChatActivity) baseFragment).getMessagesController().getSendPaidMessagesStars(user.id) > 0;
                 galleryButton = buttonsCount++;
                 documentButton = buttonsCount++;
-                if (MessagesController.getInstance(currentAccount).config.walletAvailable.get() && ((ChatActivity) baseFragment).getChatMode() == ChatActivity.MODE_DEFAULT && isMoneyTabRecipient(user)) {
+                if (!CleanUi.HIDE_PAID_PROMO && MessagesController.getInstance(currentAccount).config.walletAvailable.get() && ((ChatActivity) baseFragment).getChatMode() == ChatActivity.MODE_DEFAULT && isMoneyTabRecipient(user)) {
                     moneyButton = buttonsCount++;
                 }
 
                 if (plainTextEnabled) {
                     locationButton = buttonsCount++;
                 }
-                if (plainTextEnabled && MessagesController.getInstance(currentAccount).richEditorAvailable()) {
+                if (!CleanUi.HIDE_PAID_PROMO && plainTextEnabled && MessagesController.getInstance(currentAccount).richEditorAvailable()) {
                     richButton = buttonsCount++;
                 }
 
@@ -6868,10 +6869,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     contactButton = buttonsCount++;
                 }
                 musicButton = buttonsCount++;
-                if (todoEnabled) {
+                if (!CleanUi.HIDE_PAID_PROMO && todoEnabled) {
                     todoButton = buttonsCount++;
                 }
-                if (baseFragment instanceof ChatActivity && ((ChatActivity) baseFragment).getChatMode() == 0 && user != null && !paidUser && !user.bot && QuickRepliesController.getInstance(currentAccount).hasReplies()) {
+                if (!CleanUi.HIDE_PAID_PROMO && baseFragment instanceof ChatActivity && ((ChatActivity) baseFragment).getChatMode() == 0 && user != null && !paidUser && !user.bot && QuickRepliesController.getInstance(currentAccount).hasReplies()) {
                     quickRepliesButton = buttonsCount++;
                 }
 
